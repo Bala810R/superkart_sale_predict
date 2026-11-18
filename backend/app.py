@@ -4,12 +4,16 @@ import numpy as np
 import joblib  # For loading the serialized model
 import pandas as pd  # For data manipulation
 from flask import Flask, request, jsonify  # For creating the Flask API
+from pathlib import Path
 
 # Initialize Flask app
 superkart_api = Flask("SuperKart Sales Predictor")
 
 # Load the trained model
-model = joblib.load("backend/superkart_sales_model.joblib")
+artifact = joblib.load(Path(__file__).resolve().parent / "superkart_model.joblib")
+
+model = artifact["model"]
+preprocessor = artifact["preprocessor"]
 
 # Define a route for the home page
 @superkart_api.get('/')
@@ -28,23 +32,25 @@ def predict_sales():
 
     # Extract relevant features from the input data
     sample = {
-    'Product_Weight': dataset['Product_Weight'],
-    'Product_Sugar_Content': dataset['Product_Sugar_Content'],
-    'Product_Allocated_Area': dataset['Product_Allocated_Area'],
-    'Product_MRP': dataset['Product_MRP'],
-    'Store_Size': dataset['Store_Size'],
-    'Store_Location_City_Type': dataset['Store_Location_City_Type'],
-    'Store_Type': dataset['Store_Type'],
-    'Product_Id_char': dataset['Product_Id_char'],
-    'Store_Age_Years': dataset['Store_Age_Years'],
-    'Product_Type_Category': dataset['Product_Type_Category']
+    "Product_Weight": dataset["Product_Weight"],
+    "Product_Sugar_Content": dataset["Product_Sugar_Content"],
+    "Product_Allocated_Area": dataset["Product_Allocated_Area"],
+    "Product_Type": dataset["Product_Type"],
+    "Product_MRP": dataset["Product_MRP"],
+    "Store_Size": dataset["Store_Size"],
+    "Store_Location_City_Type": dataset["Store_Location_City_Type"],
+    "Store_Type": dataset["Store_Type"],
 }
 
     # Convert the extracted data into a DataFrame
     input_data = pd.DataFrame([sample])
 
-    # Make a prediction using the trained model
-    prediction = model.predict(input_data).tolist()[0]
+    # Transform the input data using the saved preprocessor
+    processed_data = preprocessor.transform(input_data)
+
+    # Generate the prediction
+    prediction = model.predict(processed_data).tolist()[0]
+
 
     # Return the prediction as a JSON response
     return jsonify({'Sales': prediction})
@@ -58,8 +64,11 @@ def predict_sales_batch():
     # Read the file into a DataFrame
     input_data = pd.read_csv(file)
 
+    # Preprocess the batch DataFrame using the saved preprocessor
+    processed_data = preprocessor.transform(input_data)
+
     # Make predictions for the batch data
-    predictions = model.predict(input_data).tolist()
+    predictions = model.predict(processed_data).tolist()
 
     # Create an output dictionary mapping row index to predicted sales
     output_dict = {str(i): round(pred, 2) for i, pred in enumerate(predictions)}
