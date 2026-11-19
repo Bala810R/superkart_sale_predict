@@ -28,11 +28,11 @@ with left:
     Product_Id_char = st.selectbox(
         "Product ID Character", ["NC", "DR", "FD", "FS"]
     )
-
-with right:    
     Product_Type_Category = st.selectbox(
         "Product Type Category", ["Perishables", "Non Perishables"]
     )
+
+with right:
     Store_Size = st.selectbox("Store Size", ["Small", "Medium", "High"])
     Store_Location_City_Type = st.selectbox(
         "Store Location City Type", ["Tier 1", "Tier 2", "Tier 3"]
@@ -54,14 +54,13 @@ product_data = {
     "Product_Weight": Product_Weight,
     "Product_Sugar_Content": Product_Sugar_Content,
     "Product_Allocated_Area": Product_Allocated_Area,
-    "Product_Type": Product_Type,
     "Product_MRP": Product_MRP,
+    "Product_Id_char": Product_Id_char,
+    "Product_Type_Category": Product_Type_Category,
     "Store_Size": Store_Size,
     "Store_Location_City_Type": Store_Location_City_Type,
     "Store_Type": Store_Type,
-    "Product_Id_char": Product_Id_char,
-    "Store_Age_Years": Store_Age_Years,
-    "Product_Type_Category": Product_Type_Category
+    "Store_Age_Years": Store_Age_Years
 }
 
 
