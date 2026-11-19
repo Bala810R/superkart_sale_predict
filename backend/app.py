@@ -35,12 +35,15 @@ def predict_sales():
     "Product_Weight": dataset["Product_Weight"],
     "Product_Sugar_Content": dataset["Product_Sugar_Content"],
     "Product_Allocated_Area": dataset["Product_Allocated_Area"],
-    "Product_Type": dataset["Product_Type"],
     "Product_MRP": dataset["Product_MRP"],
     "Store_Size": dataset["Store_Size"],
     "Store_Location_City_Type": dataset["Store_Location_City_Type"],
     "Store_Type": dataset["Store_Type"],
+    "Product_Id_char": dataset["Product_Id_char"],
+    "Store_Age_Years": dataset["Store_Age_Years"],
+    "Product_Type_Category": dataset["Product_Type_Category"]
 }
+
 
     # Convert the extracted data into a DataFrame
     input_data = pd.DataFrame([sample])
