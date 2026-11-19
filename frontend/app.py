@@ -12,6 +12,9 @@ st.write("Enter product and store details to predict sales.")
 
 left, right = st.columns(2)
 
+
+# Reorganize the input fields into two columns for better layout
+
 with left:
     Product_Weight = st.number_input("Product Weight", min_value=0.0, value=12.66)
     Product_Sugar_Content = st.selectbox(
@@ -19,19 +22,17 @@ with left:
     )
     Product_Allocated_Area = st.number_input(
         "Product Allocated Area", min_value=0.0, value=0.027
-    )
-    Product_Type = st.selectbox(
-        "Product Type",
-        [
-            "Baking Goods", "Breads", "Breakfast", "Canned", "Dairy",
-            "Frozen Foods", "Fruits and Vegetables", "Hard Drinks",
-            "Health and Hygiene", "Household", "Meat", "Others",
-            "Seafood", "Snack Foods", "Soft Drinks", "Starchy Foods",
-        ],
+    )    
+    Product_MRP = st.number_input("Product MRP", min_value=0.0, value=117.08)
+    # include product charaters NC, DR, FD, FS
+    Product_Id_char = st.selectbox(
+        "Product ID Character", ["NC", "DR", "FD", "FS"]
     )
 
-with right:
-    Product_MRP = st.number_input("Product MRP", min_value=0.0, value=117.08)
+with right:    
+    Product_Type_Category = st.selectbox(
+        "Product Type Category", ["Perishables", "Non Perishables"]
+    )
     Store_Size = st.selectbox("Store Size", ["Small", "Medium", "High"])
     Store_Location_City_Type = st.selectbox(
         "Store Location City Type", ["Tier 1", "Tier 2", "Tier 3"]
@@ -43,6 +44,10 @@ with right:
             "Supermarket Type3", "Departmental Store", "Food Mart",
         ],
     )
+    Store_Age_Years = st.number_input("Store Age in Years", min_value=0, value=10)
+
+
+
 
 # Create JSON payload
 product_data = {
@@ -54,7 +59,11 @@ product_data = {
     "Store_Size": Store_Size,
     "Store_Location_City_Type": Store_Location_City_Type,
     "Store_Type": Store_Type,
+    "Product_Id_char": Product_Id_char,
+    "Store_Age_Years": Store_Age_Years,
+    "Product_Type_Category": Product_Type_Category
 }
+
 
 # Single Prediction
 if st.button("Predict", type='primary'):
